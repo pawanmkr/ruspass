@@ -71,13 +71,38 @@ fn handle_save_password() {
 }
 
 fn handle_search_password() {
-    println!("Not implemented")
+    print!("Please enter the website for which you want the username and password: ");
+    io::stdout().flush().unwrap();
+    let mut website = String::new();
+    io::stdin()
+        .read_line(&mut website)
+        .expect("Failed to read the input.");
+
+    match vault::search(website.trim()) {
+        Some(secret) => {
+            println!("Username: {}", secret.username);
+            println!("Password: {}", secret.password);
+        }
+        None => {
+            eprintln!("No secret found.");
+        }
+    }
 }
 
 fn handle_show_all_passwords() {
-    println!("Not implemented")
+    let string_pass = vault::get_all();
+    println!("{}", string_pass);
 }
 
 fn handle_delete_password() {
-    println!("Not impletemented")
+    print!("Please enter the website for which you want delete the password: ");
+    io::stdout().flush().unwrap();
+    let mut website = String::new();
+    io::stdin()
+        .read_line(&mut website)
+        .expect("Failed to read the input.");
+
+    vault::delete(&website.trim());
+
+    println!("Success: password deleted for {}", website.trim());
 }
